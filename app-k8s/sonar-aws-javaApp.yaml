@@ -37,7 +37,28 @@ metadata:
 spec:
   type: LoadBalancer 
   selector:
-    app: spring-demo 
+    app: sonar-aws-javaapp  
   ports:
     - port: 8080
-      targetPort: 8080 
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: sonar-aws-javaapp-ns 
+  name: javaapp-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: sonar-aws-javaapp-svc  
+              port:
+                number: 8080      
