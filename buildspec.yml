@@ -67,7 +67,7 @@ phases:
         if [[ ${CODEBUILD_BUILD_SUCCEEDING} = '1' ]]; then
          echo Build succeeded. Running post-build steps...
          echo Build completed on `date`
-         if [[ ${PRKey} == '']]; then
+         if [[ ${PRKey} == '' ]]; then
            if [[ ${SourceBranch##refs/heads/} == 'main' ]] ; then
              echo 'Building the Docker image...'
              echo Build started on `date`
