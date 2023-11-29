@@ -42,23 +42,19 @@ spec:
     - port: 8080
       targetPort: 8080 
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: v1
+kind: Service
 metadata:
-  namespace: sonar-aws-javaapp-ns 
-  name: javaapp-ingress
-  annotations:
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
+  name: sonar-aws-javaapp-svc 
+  namespace: sonar-aws-javaapp-ns
+  annotations: 
+   service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+   service.beta.kubernetes.io/aws-load-balancer-type: nlb
 spec:
-  ingressClassName: alb
-  rules:
-    - http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: sonar-aws-javaapp-svc  
-              port:
-                number: 8080      
+  selector:
+    app: sonar-aws-javaapp 
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
