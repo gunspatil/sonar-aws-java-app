@@ -25,7 +25,13 @@ phases:
       # Install aws client
       - pip3 install --upgrade awscli
       # Install kubectl tools
-      - curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.27.0/bin/linux/amd64/kubectl
+      - export ARCH=$(uname -m)
+      - if [ "$ARCH" = "aarch64" ]; then
+         export KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release/v1.27.0/bin/linux/arm64/kubectl";
+       else
+         export KUBECTL_URL="https://storage.googleapis.com/kubernetes-release/release/v1.27.0/bin/linux/amd64/kubectl";
+        fi
+      - curl -LO $KUBECTL_URL
       - chmod +x kubectl
       - mv ./kubectl /usr/local/bin/kubectl
       - echo "CODEBUILD_SOURCE_VERSION -> ${CODEBUILD_SOURCE_VERSION}"
